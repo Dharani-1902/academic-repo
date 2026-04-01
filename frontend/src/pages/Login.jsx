@@ -24,14 +24,14 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div className="login-container animate-fade">
+      <div className="card glass login-card">
         <div className="login-header">
-          <BookOpen className="logo-icon" size={48} />
+          <BookOpen className="logo-icon animate-bounce-subtle" size={48} />
           <h1>Academic Repository</h1>
           <p>Login to access your structured academic history</p>
         </div>
-        
+
         {error && (
           <div className="error-message">
             <AlertCircle size={18} />
@@ -41,36 +41,38 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label>Username (ID)</label>
-            <input 
-              type="text" 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} 
-              required 
+            <label className="form-label">Username (ID)</label>
+            <input
+              type="text"
+              className="form-input"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
               placeholder="Enter your Student ID / Admin Username"
             />
           </div>
-          
+
           <div className="form-group">
-            <label>Password</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              className="form-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
               placeholder="••••••••"
             />
           </div>
 
           <div className="form-group">
-            <label>Role</label>
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <label className="form-label">Role</label>
+            <select className="form-input" value={role} onChange={(e) => setRole(e.target.value)}>
               <option value="student">Student</option>
               <option value="admin">Administrator</option>
             </select>
           </div>
 
-          <button type="submit" className="btn-primary login-btn">
+          <button type="submit" className="btn btn-primary login-btn">
             Sign In
           </button>
         </form>

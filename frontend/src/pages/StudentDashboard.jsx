@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
-import { BookOpen, LogOut, Award, Book, AlertTriangle } from 'lucide-react';
+import { BookOpen, LogOut, Award, Book, AlertTriangle, UserCircle, Briefcase, Calendar, Mail } from 'lucide-react';
 
 const StudentDashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const [records, setRecords] = useState([]);
-  const [studentInfo, setStudentInfo] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Fetch student's academic records using their username (which is their student_id)
         const res = await api.get(`/records/${user.username}`);
         setRecords(res.data);
       } catch (err) {
@@ -34,16 +32,15 @@ const StudentDashboard = () => {
 
   // Calculate total credits
   const totalCredits = records.reduce((sum, r) => sum + Number(r.credits), 0);
-  
-  // Calculate average GPA approx (A=4, B=3, C=2, D=1, F=0)
-  const gradePoints = { 'A+':4.0, 'A':4.0, 'A-':3.7, 'B+':3.3, 'B':3.0, 'B-':2.7, 'C+':2.3, 'C':2.0, 'C-':1.7, 'D+':1.3, 'D':1.0, 'F':0 };
-  // const gradePoints = { 'O':9.5, 'A+':9.0, 'A':8.0, 'B+':7.0, 'B':6.0, 'C+':5.5, 'C':5.0, 'F':0 };
+
+  // Calculate average GPA approx
+  const gradePoints = { 'A+': 4.0, 'A': 4.0, 'A-': 3.7, 'B+': 3.3, 'B': 3.0, 'B-': 2.7, 'C+': 2.3, 'C': 2.0, 'C-': 1.7, 'D+': 1.3, 'D': 1.0, 'F': 0, 'U': 0 };
 
   let totalGradePoints = 0;
   let gradedCredits = 0;
   records.forEach(r => {
     const points = gradePoints[r.grade.toUpperCase()] !== undefined ? gradePoints[r.grade.toUpperCase()] : null;
-    if(points !== null) {
+    if (points !== null) {
       totalGradePoints += points * Number(r.credits);
       gradedCredits += Number(r.credits);
     }
@@ -54,88 +51,126 @@ const StudentDashboard = () => {
   const studentArrears = records.filter(r => r.grade.toUpperCase() === 'U');
 
   return (
-    <div className="dashboard-container">
-      <header className="topbar">
-        <div className="topbar-brand">
-          <BookOpen color="var(--accent)"/> Student Academic Hub
+    <div className="dashboard-container animate-fade">
+      <aside className="sidebar">
+        <div className="sidebar-logo">
+          <BookOpen size={32} style={{ marginBottom: '0.5rem', display: 'block' }} />
+          Academia
         </div>
-        <div className="topbar-actions">
-          <span className="user-info">Student ID: {user?.username}</span>
-          <button onClick={logout} className="logout-btn"><LogOut size={16}/> Logout</button>
-        </div>
-      </header>
 
-      <main className="content-wrapper">
-        <div className="page-header">
-          <h2>My Academic History</h2>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div className="btn btn-primary" style={{ justifyContent: 'flex-start', cursor: 'default' }}>
+            <Book size={20} /> My Academic Hub
+          </div>
+        </nav>
+
+        <div style={{ marginTop: 'auto' }}>
+          <div className="card glass" style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+              <UserCircle size={32} style={{ color: 'var(--primary)' }} />
+              <div>
+                <p style={{ fontSize: '0.7rem', opacity: 0.7, textTransform: 'uppercase' }}>Student ID</p>
+                <p style={{ fontWeight: 600, fontSize: '0.9rem' }}>{user?.username}</p>
+              </div>
+            </div>
+            <button onClick={logout} className="btn btn-danger" style={{ width: '100%', padding: '0.5rem' }}>
+              <LogOut size={16} /> Logout
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main className="main-content">
+        <div className="page-header" style={{ marginBottom: '2.5rem' }}>
+          <h2 style={{ fontSize: '2rem', background: 'linear-gradient(to right, var(--text-main), var(--text-muted))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Welcome back!</h2>
+          <p style={{ color: 'var(--text-muted)', marginTop: '0.25rem' }}>Track your academic progress and grade history here.</p>
         </div>
 
         <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-icon" style={{color: 'var(--success)', background: 'rgba(16, 185, 129, 0.1)'}}><Book size={32} /></div>
+          <div className="card glass stat-card">
+            <div className="stat-icon" style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#0ea5e9' }}><Book size={28} /></div>
             <div className="stat-details">
-              <h3>Total Credits Earned</h3>
+              <h3>Earned Credits</h3>
               <p>{totalCredits}</p>
             </div>
           </div>
-          <div className="stat-card">
-            <div className="stat-icon" style={{color: '#eeb24a', background: 'rgba(245, 158, 11, 0.1)'}}><Award size={32} /></div>
+          <div className="card glass stat-card">
+            <div className="stat-icon" style={{ background: 'hsla(40, 95%, 55%, 0.1)', color: 'var(--warning)' }}><Award size={28} /></div>
             <div className="stat-details">
               <h3>Cumulative GPA</h3>
               <p>{gpa}</p>
             </div>
           </div>
+          <div className="card glass stat-card" style={{ border: studentArrears.length > 0 ? '1px solid var(--danger)' : '1px solid var(--border-color)' }}>
+            <div className="stat-icon" style={{ background: 'hsla(0, 85%, 60%, 0.1)', color: 'var(--danger)' }}><AlertTriangle size={28} /></div>
+            <div className="stat-details">
+              <h3>Pending Arrears</h3>
+              <p style={{ color: studentArrears.length > 0 ? 'var(--danger)' : 'inherit' }}>{studentArrears.length}</p>
+            </div>
+          </div>
         </div>
 
         {studentArrears.length > 0 && (
-          <div className="table-container" style={{border: '1px solid var(--danger)', background: 'rgba(239, 68, 68, 0.05)', marginBottom: '2rem'}}>
-            <div style={{padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', borderBottom: '1px solid rgba(239, 68, 68, 0.2)'}}>
-              <AlertTriangle color="var(--danger)" size={20}/>
-              <h3 style={{color: 'var(--danger)', margin: 0}}>Pending Arrears ({studentArrears.length})</h3>
+          <div className="card animate-fade" style={{ border: '1px solid hsla(0, 85%, 60%, 0.2)', background: 'hsla(0, 85%, 60%, 0.03)', marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+              <AlertTriangle className="animate-bounce-subtle" color="var(--danger)" size={20} />
+              <h3 style={{ color: 'var(--danger)', fontSize: '1.1rem' }}>Attention Required</h3>
             </div>
-            <div style={{padding: '1rem 1.5rem'}}>
-              <p style={{fontSize: '0.9rem', color: 'var(--text-muted)'}}>The following subjects have Arrear (Grade U). Please contact the administrator for re-examination details.</p>
-              <ul style={{marginTop: '1rem', listStyle: 'none', padding: 0, display: 'flex', flexWrap: 'wrap', gap: '1rem'}}>
-                {studentArrears.map(a => (
-                  <li key={a.id} style={{background: 'rgba(239, 68, 68, 0.1)', padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid rgba(239, 68, 68, 0.2)'}}>
-                    <strong style={{color: 'white'}}>{a.subject_name}</strong> <span style={{color: 'var(--text-muted)', marginLeft: '0.5rem'}}>({a.semester})</span>
-                  </li>
-                ))}
-              </ul>
+            <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', opacity: 0.8 }}>The following subjects have an Arrear (Grade U). Please coordinate with the administration for the re-examination process.</p>
+            <div style={{ marginTop: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+              {studentArrears.map(a => (
+                <span key={a.id} className="card glass" style={{ padding: '0.6rem 1.25rem', borderRadius: '12px', border: '1px solid hsla(0, 85%, 60%, 0.1)', fontSize: '0.9rem', fontWeight: 600, color: 'var(--danger)', background: 'white' }}>
+                  {a.subject_name} <span style={{ opacity: 0.5, fontWeight: 400, marginLeft: '0.5rem' }}>({a.semester})</span>
+                </span>
+              ))}
             </div>
           </div>
         )}
 
         {Object.keys(groupedRecords).length === 0 ? (
-          <div className="table-container" style={{padding: '4rem', textAlign: 'center'}}>
-            <BookOpen size={48} color="var(--text-muted)" style={{margin: '0 auto 1rem'}} />
-            <h3 style={{color: 'var(--text-muted)'}}>No academic records found.</h3>
-            <p style={{color: 'var(--border-color)', marginTop: '0.5rem'}}>Your records will appear here once updated by an administrator.</p>
+          <div className="card glass animate-fade" style={{ textAlign: 'center', padding: '5rem 2rem' }}>
+            <BookOpen size={64} style={{ color: 'var(--border-color)', marginBottom: '1.5rem', opacity: 0.5 }} />
+            <h3 style={{ fontSize: '1.5rem', color: 'var(--text-muted)' }}>No academic records found</h3>
+            <p style={{ marginTop: '0.75rem', opacity: 0.7 }}>Your academic profile is being updated. Please check back later.</p>
           </div>
         ) : (
-          Object.keys(groupedRecords).sort().map(semester => (
-            <div key={semester} className="table-container">
-              <div style={{padding: '1.25rem 1.5rem', background: 'rgba(15, 23, 42, 0.6)', borderBottom: '1px solid var(--border-color)'}}>
-                <h3 style={{color: 'var(--accent)'}}>{semester}</h3>
+          Object.keys(groupedRecords).sort().reverse().map(semester => (
+            <div key={semester} className="animate-fade" style={{ marginBottom: '3rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
+                <div style={{ width: '4px', height: '24px', background: 'var(--primary)', borderRadius: '4px' }}></div>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)' }}>{semester}</h3>
               </div>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Subject</th>
-                    <th>Credits</th>
-                    <th>Grade</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {groupedRecords[semester].map(record => (
-                    <tr key={record.id}>
-                      <td>{record.subject_name}</td>
-                      <td>{record.credits}</td>
-                      <td><strong style={{color: record.grade.includes('F') ? 'var(--danger)' : 'var(--success)'}}>{record.grade}</strong></td>
+              <div className="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style={{ width: '60%' }}>Subject Name</th>
+                      <th>Credits</th>
+                      <th style={{ textAlign: 'right' }}>Grade Point</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {groupedRecords[semester].map(record => (
+                      <tr key={record.id}>
+                        <td><span style={{ fontWeight: 500 }}>{record.subject_name}</span></td>
+                        <td>{record.credits}</td>
+                        <td style={{ textAlign: 'right' }}>
+                          <span style={{
+                            padding: '0.4rem 1rem',
+                            borderRadius: '8px',
+                            fontWeight: 700,
+                            fontSize: '0.9rem',
+                            background: record.grade.toUpperCase() === 'U' ? 'hsla(0, 85%, 60%, 0.1)' : 'hsla(150, 80%, 40%, 0.1)',
+                            color: record.grade.toUpperCase() === 'U' ? 'var(--danger)' : 'var(--success)'
+                          }}>
+                            {record.grade}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           ))
         )}
