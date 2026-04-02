@@ -1,27 +1,29 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const mongoose = require('mongoose');
 
-const AcademicRecord = sequelize.define('AcademicRecord', {
+const academicRecordSchema = new mongoose.Schema({
   student_id: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   semester: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   subject_name: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   grade: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   credits: {
-    type: DataTypes.FLOAT,
-    allowNull: false
+    type: Number,
+    required: true
   }
+}, {
+  timestamps: true
 });
 
+const AcademicRecord = mongoose.model('AcademicRecord', academicRecordSchema);
 module.exports = AcademicRecord;

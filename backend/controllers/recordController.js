@@ -2,8 +2,8 @@ const AcademicRecord = require('../models/AcademicRecord');
 
 const getRecords = async (req, res) => {
   try {
-    const records = await AcademicRecord.findAll({ 
-      where: { student_id: req.params.student_id } 
+    const records = await AcademicRecord.find({ 
+      student_id: req.params.student_id 
     });
     res.json(records);
   } catch (error) {
@@ -29,7 +29,7 @@ const addRecord = async (req, res) => {
 
 const updateRecord = async (req, res) => {
   try {
-    const record = await AcademicRecord.findByPk(req.params.id);
+    const record = await AcademicRecord.findById(req.params.id);
     if (record) {
       record.semester = req.body.semester || record.semester;
       record.subject_name = req.body.subject_name || record.subject_name;
@@ -48,9 +48,8 @@ const updateRecord = async (req, res) => {
 
 const deleteRecord = async (req, res) => {
   try {
-    const record = await AcademicRecord.findByPk(req.params.id);
+    const record = await AcademicRecord.findByIdAndDelete(req.params.id);
     if (record) {
-      await record.destroy();
       res.json({ message: 'Academic record removed' });
     } else {
       res.status(404).json({ message: 'Record not found' });
@@ -62,8 +61,8 @@ const deleteRecord = async (req, res) => {
 
 const getAllArrears = async (req, res) => {
   try {
-    const arrears = await AcademicRecord.findAll({
-      where: { grade: 'U' }
+    const arrears = await AcademicRecord.find({
+      grade: 'U'
     });
     res.json(arrears);
   } catch (error) {

@@ -1,50 +1,52 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
-const User = require('./User');
+const mongoose = require('mongoose');
 
-const Student = sequelize.define('Student', {
+const studentSchema = new mongoose.Schema({
   student_id: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
+    required: true,
     unique: true
   },
   name: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   department: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   year: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true
   },
   email: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
+    required: true,
     unique: true
   },
   skills: {
-    type: DataTypes.TEXT,
-    allowNull: true
+    type: String,
+    default: ''
   },
   extra_activities: {
-    type: DataTypes.TEXT,
-    allowNull: true
+    type: String,
+    default: ''
   },
   skills_status: {
-    type: DataTypes.STRING,
-    defaultValue: 'Ongoing'
+    type: String,
+    default: 'Ongoing'
   },
   activities_status: {
-    type: DataTypes.STRING,
-    defaultValue: 'Ongoing'
+    type: String,
+    default: 'Ongoing'
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
+}, {
+  timestamps: true
 });
 
-// Relationships
-Student.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
-User.hasOne(Student, { foreignKey: 'userId' });
-
+const Student = mongoose.model('Student', studentSchema);
 module.exports = Student;
