@@ -13,7 +13,7 @@ const getStudents = async (req, res) => {
 };
 
 const createStudent = async (req, res) => {
-  const { student_id, name, department, year, email, password } = req.body;
+  const { student_id, name, department, year, email, password, skills, extra_activities } = req.body;
   try {
     const userExists = await User.findOne({ where: { username: student_id } });
     if (userExists) {
@@ -32,6 +32,8 @@ const createStudent = async (req, res) => {
       department,
       year,
       email,
+      skills,
+      extra_activities,
       userId: user.id
     });
 
@@ -49,6 +51,10 @@ const updateStudent = async (req, res) => {
       student.department = req.body.department || student.department;
       student.year = req.body.year || student.year;
       student.email = req.body.email || student.email;
+      student.skills = req.body.skills !== undefined ? req.body.skills : student.skills;
+      student.extra_activities = req.body.extra_activities !== undefined ? req.body.extra_activities : student.extra_activities;
+      student.skills_status = req.body.skills_status !== undefined ? req.body.skills_status : student.skills_status;
+      student.activities_status = req.body.activities_status !== undefined ? req.body.activities_status : student.activities_status;
       
       await student.save();
       res.json(student);
@@ -75,4 +81,20 @@ const deleteStudent = async (req, res) => {
   }
 };
 
-module.exports = { getStudents, createStudent, updateStudent, deleteStudent };
+const getStudentProfile = async (req, res) => {
+  try {
+    const student = await Student.findOne({ 
+      where: { student_id: req.params.id },
+      include: [{ model: User, attributes: ['username'] }]
+    });
+    if (student) {
+      res.json(student);
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { getStudents, createStudent, updateStudent, deleteStudent, getStudentProfile };

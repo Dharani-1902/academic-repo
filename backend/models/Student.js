@@ -24,6 +24,22 @@ const Student = sequelize.define('Student', {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
+  },
+  skills: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  extra_activities: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  skills_status: {
+    type: DataTypes.STRING,
+    defaultValue: 'Ongoing'
+  },
+  activities_status: {
+    type: DataTypes.STRING,
+    defaultValue: 'Ongoing'
   }
 });
 

@@ -1,17 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
-import { BookOpen, LogOut, Award, Book, AlertTriangle, UserCircle, Briefcase, Calendar, Mail } from 'lucide-react';
+import { BookOpen, LogOut, Award, Book, AlertTriangle, UserCircle, Briefcase, Calendar, Mail, Zap, Trophy } from 'lucide-react';
 
 const StudentDashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const [records, setRecords] = useState([]);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await api.get(`/records/${user.username}`);
-        setRecords(res.data);
+        const [recordsRes, profileRes] = await Promise.all([
+          api.get(`/records/${user.username}`),
+          api.get(`/students/profile/${user.username}`)
+        ]);
+        setRecords(recordsRes.data);
+        setProfile(profileRes.data);
       } catch (err) {
         console.error(err);
       }
@@ -108,6 +113,60 @@ const StudentDashboard = () => {
               <p style={{ color: studentArrears.length > 0 ? 'var(--danger)' : 'inherit' }}>{studentArrears.length}</p>
             </div>
           </div>
+          
+          <div className="card glass stat-card" style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column', gap: '1rem', height: 'auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Zap size={24} style={{ color: 'var(--primary)' }} />
+                <h3 style={{ fontSize: '1.1rem' }}>My Skills</h3>
+              </div>
+              <span style={{
+                padding: '0.2rem 0.6rem',
+                borderRadius: '999px',
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                background: profile?.skills_status === 'Completed' ? 'hsla(150, 80%, 40%, 0.1)' : 'hsla(210, 80%, 50%, 0.1)',
+                color: profile?.skills_status === 'Completed' ? 'var(--success)' : 'var(--primary)',
+                border: '1px solid currentColor'
+              }}>
+                {profile?.skills_status || 'Ongoing'}
+              </span>
+            </div>
+            {profile?.skills ? (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.25rem' }}>
+                {profile.skills.split(',').map((skill, idx) => (
+                  <span key={idx} style={{ background: 'var(--primary-light)', color: 'var(--primary)', padding: '0.3rem 0.75rem', borderRadius: '10px', fontSize: '0.85rem', fontWeight: 600 }}>
+                    {skill.trim()}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', fontStyle: 'italic' }}>No skills recorded yet.</p>
+            )}
+          </div>
+
+          <div className="card glass stat-card" style={{ gridColumn: 'span 1', display: 'flex', flexDirection: 'column', gap: '1rem', height: 'auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Trophy size={24} style={{ color: 'var(--warning)' }} />
+                <h3 style={{ fontSize: '1.1rem' }}>Activities</h3>
+              </div>
+              <span style={{
+                padding: '0.2rem 0.6rem',
+                borderRadius: '999px',
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                background: profile?.activities_status === 'Completed' ? 'hsla(150, 80%, 40%, 0.1)' : 'hsla(40, 80%, 50%, 0.1)',
+                color: profile?.activities_status === 'Completed' ? 'var(--success)' : 'var(--warning)',
+                border: '1px solid currentColor'
+              }}>
+                {profile?.activities_status || 'Ongoing'}
+              </span>
+            </div>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', opacity: 0.8, lineHeight: '1.4' }}>
+              {profile?.extra_activities || <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>None active</span>}
+            </p>
+          </div>
         </div>
 
         {studentArrears.length > 0 && (
@@ -120,7 +179,7 @@ const StudentDashboard = () => {
             <div style={{ marginTop: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
               {studentArrears.map(a => (
                 <span key={a.id} className="card glass" style={{ padding: '0.6rem 1.25rem', borderRadius: '12px', border: '1px solid hsla(0, 85%, 60%, 0.1)', fontSize: '0.9rem', fontWeight: 600, color: 'var(--danger)', background: 'white' }}>
-                  {a.subject_name} <span style={{ opacity: 0.5, fontWeight: 400, marginLeft: '0.5rem' }}>({a.semester})</span>
+                  {a.subject_name} <span style={{ opacity: 0.5, fontWeight: 400, marginLeft: '0.5rem' }}>({a.semester.toLowerCase().includes('semester') ? a.semester : `Semester ${a.semester}`})</span>
                 </span>
               ))}
             </div>
@@ -138,7 +197,9 @@ const StudentDashboard = () => {
             <div key={semester} className="animate-fade" style={{ marginBottom: '3rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
                 <div style={{ width: '4px', height: '24px', background: 'var(--primary)', borderRadius: '4px' }}></div>
-                <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)' }}>{semester}</h3>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)', textTransform: 'capitalize' }}>
+                  {semester.toLowerCase().includes('semester') ? semester : `Semester ${semester}`}
+                </h3>
               </div>
               <div className="table-wrapper">
                 <table>
