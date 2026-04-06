@@ -22,6 +22,7 @@ app.use(cors({
 app.use(express.json());
 
 // Routes
+app.get('/', (req, res) => res.send('Student Academic Repository Backend API is running...'));
 app.use('/api', authRoutes); // login, logout
 app.use('/api/students', studentRoutes); // Protected Admin student routes
 app.use('/api/records', recordRoutes); // Protected Academic record routes

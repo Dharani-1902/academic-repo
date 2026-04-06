@@ -1,0 +1,70 @@
+{
+  "students": [
+    {
+      "student_id": "101",
+      "name": "dharani",
+      "department": "cse",
+      "year": "3"
+    },
+    {
+      "student_id": "102",
+      "name": "dhivi",
+      "department": "cse",
+      "year": "3"
+    },
+    {
+      "student_id": "103",
+      "name": "BARATH",
+      "department": "CSE",
+      "year": "2"
+    },
+    {
+      "student_id": "104",
+      "name": "AJAY",
+      "department": "CSE",
+      "year": "3"
+    },
+    {
+      "student_id": "105",
+      "name": "GOWTHAM",
+      "department": "CSE",
+      "year": "3"
+    },
+    {
+      "student_id": "106",
+      "name": "ANBU",
+      "department": "CSE",
+      "year": "3"
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "password": "$2b$10$vUr2LZ.Fa6AgbJpviTqqtu0sv5uLvKxmhkyWc4z4aW5F0Z9Z5fpJW"
+    },
+    {
+      "username": "101",
+      "password": "$2b$10$VW/uEhbkk5q3MgGl0PU8p.L4UEAK37ZkR8s.XDqv/UC3imj2wW.cS"
+    },
+    {
+      "username": "102",
+      "password": "$2b$10$/zH0/CKckzeSRqYkCsXvtuo4OQUv3v8RrVB5UGKQnYCu6/xKt/yFe"
+    },
+    {
+      "username": "103",
+      "password": "$2b$10$nFrADp563X6PMW.qpDXooeo5Rr/CoGepOjDnT53pwZpcy7eAFkMh2"
+    },
+    {
+      "username": "104",
+      "password": "$2b$10$L3M6GZ1W0zq5jM70BCXwnOENhEr7t.z/8fi417g310ZIzf5DuD9aK"
+    },
+    {
+      "username": "105",
+      "password": "$2b$10$Qjgxetwd8lvBqzdwJ7MzjOjPTJCYMA7RDFmdz.iId4jri/JFp21mW"
+    },
+    {
+      "username": "106",
+      "password": "$2b$10$5QghN8.tTa21OXEDBAYef.6LVWN0cy.sUJTlNzZG1BCqvv1KK4bPK"
+    }
+  ]
+}
