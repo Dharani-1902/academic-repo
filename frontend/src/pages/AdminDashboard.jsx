@@ -93,7 +93,7 @@ const AdminDashboard = () => {
       grade: record.grade,
       credits: record.credits
     });
-    setEditingRecordId(record.id);
+    setEditingRecordId(record._id);
     setIsEditingRecord(true);
     setShowRecordModal(true);
   };
@@ -137,7 +137,7 @@ const AdminDashboard = () => {
       if (!isEditingSkills) {
         const student = students.find(s => s.student_id === skillsForm.student_id);
         if (!student) return alert('Student not found');
-        studentIdToUpdate = student.id;
+        studentIdToUpdate = student._id;
       }
       await api.put(`/students/${studentIdToUpdate}`, { 
         skills: skillsForm.skills,
@@ -156,7 +156,7 @@ const AdminDashboard = () => {
       const student = students.find(s => s.student_id === activitiesForm.student_id);
       if (!student) return alert('Student not found');
       
-      await api.put(`/students/${student.id}`, { 
+      await api.put(`/students/${student._id}`, { 
         extra_activities: activitiesForm.extra_activities,
         activities_status: activitiesForm.activities_status
       });
@@ -325,7 +325,7 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {filteredStudents.map(student => (
-                    <tr key={student.id}>
+                    <tr key={student._id}>
                       <td><span className="student-id-tag">{student.student_id}</span></td>
                       <td style={{ fontWeight: 500 }}>{student.name}</td>
                       <td>{student.department}</td>
@@ -336,7 +336,7 @@ const AdminDashboard = () => {
                           <button onClick={() => fetchRecords(student.student_id)} className="action-btn action-btn--view">
                             <Eye size={14} /> View
                           </button>
-                          <button onClick={() => handleDeleteStudent(student.id)} className="action-btn action-btn--delete">
+                          <button onClick={() => handleDeleteStudent(student._id)} className="action-btn action-btn--delete">
                             <Trash2 size={14} />
                           </button>
                         </div>
@@ -383,7 +383,7 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {records.map(r => (
-                    <tr key={r.id}>
+                    <tr key={r._id}>
                       <td><span className="student-id-tag">{r.student_id}</span></td>
                       <td>{r.semester.toLowerCase().includes('semester') ? r.semester : `Semester ${r.semester}`}</td>
                       <td style={{ fontWeight: 500 }}>{r.subject_name}</td>
@@ -398,7 +398,7 @@ const AdminDashboard = () => {
                           <button onClick={() => openEditRecordModal(r)} className="action-btn action-btn--edit">
                             <Edit size={14} />
                           </button>
-                          <button onClick={() => handleDeleteRecord(r.id, r.student_id)} className="action-btn action-btn--delete">
+                          <button onClick={() => handleDeleteRecord(r._id, r.student_id)} className="action-btn action-btn--delete">
                             <Trash2 size={14} />
                           </button>
                         </div>
@@ -448,7 +448,7 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {arrears.map(r => (
-                    <tr key={r.id}>
+                    <tr key={r._id}>
                       <td><span className="student-id-tag">{r.student_id}</span></td>
                       <td>{r.semester.toLowerCase().includes('semester') ? r.semester : `Semester ${r.semester}`}</td>
                       <td style={{ fontWeight: 500 }}>{r.subject_name}</td>
@@ -461,7 +461,7 @@ const AdminDashboard = () => {
                           <button onClick={() => openEditRecordModal(r)} className="action-btn action-btn--edit">
                             <Edit size={14} />
                           </button>
-                          <button onClick={() => handleDeleteRecord(r.id, r.student_id)} className="action-btn action-btn--delete">
+                          <button onClick={() => handleDeleteRecord(r._id, r.student_id)} className="action-btn action-btn--delete">
                             <Trash2 size={14} />
                           </button>
                         </div>
@@ -509,7 +509,7 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {students.map(s => (
-                    <tr key={s.id}>
+                    <tr key={s._id}>
                       <td><span className="student-id-tag">{s.student_id}</span></td>
                       <td style={{ fontWeight: 500 }}>{s.name}</td>
                       <td>
@@ -540,7 +540,7 @@ const AdminDashboard = () => {
                           </span>
                           <button onClick={() => { 
                             setSkillsForm({ student_id: s.student_id, skills: s.skills || '', skills_status: s.skills_status || 'Ongoing' }); 
-                            setCurrentStudentId(s.id);
+                            setCurrentStudentId(s._id);
                             setShowSkillsModal(true); 
                             setIsEditingSkills(true); 
                           }} className="action-btn action-btn--edit">
@@ -581,7 +581,7 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {students.map(s => (
-                    <tr key={s.id}>
+                    <tr key={s._id}>
                       <td><span className="student-id-tag">{s.student_id}</span></td>
                       <td style={{ fontWeight: 500 }}>{s.name}</td>
                       <td style={{ color: 'var(--text-main)', fontSize: '0.9rem' }}>
@@ -602,7 +602,7 @@ const AdminDashboard = () => {
                           </span>
                           <button onClick={() => { 
                             setActivitiesForm({ student_id: s.student_id, extra_activities: s.extra_activities || '', activities_status: s.activities_status || 'Ongoing' }); 
-                            setCurrentStudentId(s.id);
+                            setCurrentStudentId(s._id);
                             setShowActivitiesModal(true); 
                           }} className="action-btn action-btn--edit">
                             <Edit size={14} />

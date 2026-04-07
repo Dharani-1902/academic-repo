@@ -178,7 +178,7 @@ const StudentDashboard = () => {
             <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', opacity: 0.8 }}>The following subjects have an Arrear (Grade U). Please coordinate with the administration for the re-examination process.</p>
             <div style={{ marginTop: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
               {studentArrears.map(a => (
-                <span key={a.id} className="card glass" style={{ padding: '0.6rem 1.25rem', borderRadius: '12px', border: '1px solid hsla(0, 85%, 60%, 0.1)', fontSize: '0.9rem', fontWeight: 600, color: 'var(--danger)', background: 'white' }}>
+                <span key={a._id} className="card glass" style={{ padding: '0.6rem 1.25rem', borderRadius: '12px', border: '1px solid hsla(0, 85%, 60%, 0.1)', fontSize: '0.9rem', fontWeight: 600, color: 'var(--danger)', background: 'white' }}>
                   {a.subject_name} <span style={{ opacity: 0.5, fontWeight: 400, marginLeft: '0.5rem' }}>({a.semester.toLowerCase().includes('semester') ? a.semester : `Semester ${a.semester}`})</span>
                 </span>
               ))}
@@ -212,7 +212,7 @@ const StudentDashboard = () => {
                   </thead>
                   <tbody>
                     {groupedRecords[semester].map(record => (
-                      <tr key={record.id}>
+                      <tr key={record._id}>
                         <td><span style={{ fontWeight: 500 }}>{record.subject_name}</span></td>
                         <td>{record.credits}</td>
                         <td style={{ textAlign: 'right' }}>
