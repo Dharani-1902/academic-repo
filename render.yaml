@@ -2,6 +2,7 @@ services:
   - type: web
     name: academic-repo-backend
     runtime: node
+    plan: free
     rootDir: backend
     buildCommand: npm install
     startCommand: node server.js
