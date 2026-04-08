@@ -24,32 +24,6 @@ export default function AcademicHistory({ records, onAddRecord }) {
     return tB === 'Spring' ? 1 : -1;
   });
 
-  const getGradePoints = (grade) => {
-    const mapping = {
-      'O': 10.0,
-      'A+': 9.5,
-      'A': 8.5,
-      'B+': 8.0,
-      'B': 7.0,
-      'C+': 6.5,
-      'C': 5.0,
-      'D': 3.0,
-      'U': 0.0,
-      'F': 0.0
-    };
-    return mapping[grade] || 0.0;
-  };
-
-  const calculateTermGPA = (termRecords) => {
-    let totalPoints = 0;
-    let totalCredits = 0;
-    termRecords.forEach(r => {
-      const credits = r.credits_earned ?? r.credits ?? 0;
-      totalPoints += getGradePoints(r.grade) * credits;
-      totalCredits += credits;
-    });
-    return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : null;
-  };
 
   return (
     <section className="history-section">
@@ -76,43 +50,32 @@ export default function AcademicHistory({ records, onAddRecord }) {
         <p className="empty">No academic records yet.</p>
       ) : (
         <div className="history-terms">
-          {terms.map((termKey) => {
-            const termRecords = byTerm[termKey];
-            const gpa = calculateTermGPA(termRecords);
-            return (
-              <div key={termKey} className="term-block">
-                <div className="term-header">
-                  <h3 className="term-title">{termKey}</h3>
-                  {gpa !== null && (
-                    <span className="term-gpa">
-                      GPA: <strong>{gpa}</strong>
-                    </span>
-                  )}
-                </div>
-                <table className="history-table">
-                  <thead>
-                    <tr>
-                      <th>Course</th>
-                      <th>Grade</th>
-                      <th>Credits</th>
+          {terms.map((termKey) => (
+            <div key={termKey} className="term-block">
+              <h3 className="term-title">{termKey}</h3>
+              <table className="history-table">
+                <thead>
+                  <tr>
+                    <th>Course</th>
+                    <th>Grade</th>
+                    <th>Credits</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {byTerm[termKey].map((r) => (
+                    <tr key={r.id}>
+                      <td>
+                        <span className="course-code">{r.course_code}</span>
+                        {r.course_name}
+                      </td>
+                      <td><span className="grade">{r.grade || '—'}</span></td>
+                      <td>{r.credits_earned ?? r.credits ?? '—'}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {termRecords.map((r) => (
-                      <tr key={r.id}>
-                        <td>
-                          <span className="course-code">{r.course_code}</span>
-                          {r.course_name}
-                        </td>
-                        <td><span className="grade">{r.grade || '—'}</span></td>
-                        <td>{r.credits_earned ?? r.credits ?? '—'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            );
-          })}
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
         </div>
       )}
     </section>

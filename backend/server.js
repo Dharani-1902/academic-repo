@@ -16,13 +16,13 @@ app.get('/api/students', (req, res) => {
         (
           SELECT SUM(
             CASE ar.grade 
-              WHEN 'O' THEN 10.0
-              WHEN 'A+' THEN 9.5
-              WHEN 'A' THEN 8.5
+              WHEN 'A' THEN 10.0
+              WHEN 'A-' THEN 9.0
               WHEN 'B+' THEN 8.0
               WHEN 'B' THEN 7.0
-              WHEN 'C+' THEN 6.5
-              WHEN 'C' THEN 5.0
+              WHEN 'B-' THEN 6.0
+              WHEN 'C+' THEN 5.0
+              WHEN 'C' THEN 4.0
               WHEN 'D' THEN 3.0
               WHEN 'U' THEN 0.0
               WHEN 'F' THEN 0.0
@@ -49,13 +49,13 @@ app.get('/api/students/:id', (req, res) => {
         (
           SELECT SUM(
             CASE ar.grade 
-              WHEN 'O' THEN 10.0
-              WHEN 'A+' THEN 9.5
-              WHEN 'A' THEN 8.5
+              WHEN 'A' THEN 10.0
+              WHEN 'A-' THEN 9.0
               WHEN 'B+' THEN 8.0
               WHEN 'B' THEN 7.0
-              WHEN 'C+' THEN 6.5
-              WHEN 'C' THEN 5.0
+              WHEN 'B-' THEN 6.0
+              WHEN 'C+' THEN 5.0
+              WHEN 'C' THEN 4.0
               WHEN 'D' THEN 3.0
               WHEN 'U' THEN 0.0
               WHEN 'F' THEN 0.0

@@ -76,10 +76,10 @@ if (studentCount.n === 0) {
     ('MATH101', 'Calculus I', 3);
 
     INSERT INTO academic_records (student_id, course_id, term, year, grade, credits_earned) VALUES
-    (1, 1, 'Fall', 2022, 'O', 4),
-    (1, 2, 'Spring', 2023, 'A+', 4),
-    (1, 3, 'Fall', 2022, 'A', 3),
-    (2, 3, 'Spring', 2023, 'B+', 3);
+    (1, 1, 'Fall', 2022, 'A', 4),
+    (1, 2, 'Spring', 2023, 'B+', 4),
+    (1, 3, 'Fall', 2022, 'A-', 3),
+    (2, 3, 'Spring', 2023, 'B', 3);
   `);
 }
 
