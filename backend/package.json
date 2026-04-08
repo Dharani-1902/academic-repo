@@ -1,0 +1,16 @@
+{
+  "name": "student-academic-history-api",
+  "version": "1.0.0",
+  "description": "API for Student Academic History Repository",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.6.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.1"
+  }
+}
