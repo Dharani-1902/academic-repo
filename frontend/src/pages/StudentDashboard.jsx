@@ -38,8 +38,8 @@ const StudentDashboard = () => {
   // Calculate total credits
   const totalCredits = records.reduce((sum, r) => sum + Number(r.credits), 0);
 
-  // Calculate average GPA approx
-  const gradePoints = { 'A+': 4.0, 'A': 4.0, 'A-': 3.7, 'B+': 3.3, 'B': 3.0, 'B-': 2.7, 'C+': 2.3, 'C': 2.0, 'C-': 1.7, 'D+': 1.3, 'D': 1.0, 'F': 0, 'U': 0 };
+  // Calculate average CGPA approx (10-point scale)
+  const gradePoints = { 'O': 10.0, 'A+': 9.5, 'A': 8.5, 'B+': 8.0, 'B': 7.0, 'C+': 6.5, 'C': 5.0, 'D': 3.0, 'F': 0, 'U': 0 };
 
   let totalGradePoints = 0;
   let gradedCredits = 0;
@@ -102,8 +102,8 @@ const StudentDashboard = () => {
           <div className="card glass stat-card">
             <div className="stat-icon" style={{ background: 'hsla(40, 95%, 55%, 0.1)', color: 'var(--warning)' }}><Award size={28} /></div>
             <div className="stat-details">
-              <h3>Cumulative GPA</h3>
-              <p>{gpa}</p>
+              <h3>Cumulative CGPA</h3>
+              <p>{gpa} <span style={{fontSize: '1rem', opacity: 0.7}}>/ 10</span></p>
             </div>
           </div>
           <div className="card glass stat-card" style={{ border: studentArrears.length > 0 ? '1px solid var(--danger)' : '1px solid var(--border-color)' }}>
